@@ -1,0 +1,24 @@
+{
+    "numberClients": 4,
+    "total_account": 3900,
+    "products": [
+    {
+        "name": "Pizza",
+        "numberServings": 2,
+        "price": 450,
+        "total": 900
+    },
+    {
+        "name": "Pizza",
+        "numberServings": 2,
+        "price": 450,
+        "total": 900
+    },
+    {
+        "name": "Pizza",
+        "numberServings": 2,
+        "price": 450,
+        "total": 900
+    }
+    ]
+}
