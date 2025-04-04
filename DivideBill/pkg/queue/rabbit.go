@@ -23,7 +23,7 @@ func failOnError(err error, msg string) {
 func New() *RabbitMQ{
 	var rabbit RabbitMQ
 
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial("amqp://user:password@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
@@ -38,7 +38,7 @@ func New() *RabbitMQ{
 
 func (r *RabbitMQ) Producer(msg model.Response) {
 	q, err := r.ch.QueueDeclare(
-		"hello",
+		"topic-divide",
 		false,
 		false,
 		false,   
@@ -64,4 +64,35 @@ func (r *RabbitMQ) Producer(msg model.Response) {
 		})
 	failOnError(err, "Failed to publish a message")
 	log.Println("сообщение отправлено в RabbitMQ")
+}
+
+func (r *RabbitMQ) Consumer() {
+	q, err := r.ch.QueueDeclare(
+		"hello",
+		false,   // durable
+		false,   // delete when unused
+		false,   // exclusive
+		false,   // no-wait
+		nil,     // arguments
+	)
+	failOnError(err, "Failed to declare a queue")
+	msgs, err := r.ch.Consume(
+		q.Name, // queue
+		"",     // consumer
+		true,   // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
+	failOnError(err, "Failed to register a consumer")
+
+	go func() {
+		for d := range msgs {
+		  log.Printf("Received a message: %s", d.Body)
+		}
+	  }()
+	
+	log.Println("Waiting for messages.")
+	select{}
 }

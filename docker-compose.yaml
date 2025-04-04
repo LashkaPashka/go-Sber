@@ -35,11 +35,28 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"     # порт для приложений (AMQP)
+      - "15672:15672"   # порт для веб-интерфейса
+    environment:
+      RABBITMQ_DEFAULT_USER: user     # имя пользователя
+      RABBITMQ_DEFAULT_PASS: password # пароль
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rabbitmq_net
 
 volumes:
   redis_data:
   kafka_data:
+  rabbitmq_data:
 
 networks:
   kafka_net:
+    driver: bridge
+  rabbitmq_net:
     driver: bridge
