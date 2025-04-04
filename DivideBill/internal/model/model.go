@@ -12,3 +12,8 @@ type DataDishes struct {
 	Total_account float64 `json:"total_account"`
 	Products []Products `json:"products"`
 }
+
+type Response struct {
+	Position string
+	Account string
+}

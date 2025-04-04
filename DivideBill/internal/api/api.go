@@ -21,9 +21,17 @@ func New() *API {
 }
 
 func EndPoints(api API) {
-	api.router.HandleFunc("/", nil).Methods(http.MethodGet)
+	api.router.HandleFunc("/", api.GetDivideBill()).Methods(http.MethodGet)
 }
 
 func (api *API) Run(addr string) error {
 	return http.ListenAndServe(addr, api.router)
+}
+
+func (api *API) GetDivideBill() http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		
+
+	})
 }

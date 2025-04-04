@@ -6,15 +6,22 @@ import (
 
 	"github.com/lashkapashka/divideBill/internal/model"
 	"github.com/lashkapashka/divideBill/pkg/client"
+	convertstruct "github.com/lashkapashka/divideBill/pkg/convertStruct"
+	"github.com/lashkapashka/divideBill/pkg/queue"
 	"github.com/lashkapashka/divideBill/pkg/split"
 )
 
-// type DivideService struct {
-// 	repo *repository.
-// }
+type DivideService struct {
+	rabbit *queue.RabbitMQ
+}
 
-func DivideService() {
+func New() *DivideService {
+	return &DivideService{
+		rabbit: queue.New(),
+	}
+}
 
+func (d *DivideService) Divide() {
 	var unescaped string
 
 	var dish model.DataDishes
@@ -31,9 +38,18 @@ func DivideService() {
 		panic(err)
 	}
 
-	mp1 := split.SplitPosition([]string{"Garlic Bread"}, &dish)
-	mp2 := split.SplitAccount(&dish)
+	var msg model.Response
 
-	fmt.Println("Деление по позиции: ", mp1)
-	fmt.Println("Деление по счёту: ", mp2)
+	mp1 := split.SplitPosition([]string{"Garlic Bread"}, &dish)
+	mJson := convertstruct.ConvertType(mp1)
+
+	msg.Position = string(mJson)
+	
+	mp2 := split.SplitAccount(&dish)
+	mJson = convertstruct.ConvertType(mp2)
+
+	msg.Account = string(mJson)
+
+	//d.rabbit.Producer(msg)
+	fmt.Println(msg)
 }

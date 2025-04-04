@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
-	service.DivideService()
+	service := service.New()
+
+	service.Divide()
 }
 
 
