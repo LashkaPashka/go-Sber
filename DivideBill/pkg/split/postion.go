@@ -2,29 +2,35 @@ package split
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/lashkapashka/divideBill/internal/model"
 )
 
+func SplitPosition(names []string, dishes *model.DataDishes) map[string]int {
+	var mp = make(map[string]int)
 
-func SplitPosition(name string, dishes *model.DataDishes) {
-	var mp = make(map[string]float64)
-	var total_price float64
-
-	for i := 1; i <= dishes.NumberClients; i++ {
-		for j := i+1; j <= dishes.NumberClients; j++ {
-			
-			for _, nameProduct := range dishes.Products{
-				if strings.Compare(name, nameProduct.Name) == 0 {
-					total_price = nameProduct.TotalPrice * (float64(i)/float64(j))
-					break
-				}
-			}
-
-			mp[fmt.Sprintf("%d/%d", i, j)] = total_price
-		} 
-
+	// Кэшируем цены продуктов по имени
+	priceMap := make(map[string]float64)
+	for _, p := range dishes.Products {
+		priceMap[p.Name] = p.TotalPrice
 	}
 
+	// Предвычисляем сумму
+	totalSum := 0.0
+	for _, name := range names {
+		if price, ok := priceMap[name]; ok {
+			totalSum += price
+		}
+	}
+
+	// Основные циклы
+	for i := 1; i <= dishes.NumberClients; i++ {
+		for j := i + 1; j <= dishes.NumberClients; j++ {
+			totalPrice := totalSum * (float64(i) / float64(j))
+			key := fmt.Sprintf("%d/%d", i, j)
+			mp[key] = int(totalPrice)
+		}
+	}
+
+	return mp
 }

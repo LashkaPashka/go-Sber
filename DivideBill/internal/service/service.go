@@ -6,6 +6,7 @@ import (
 
 	"github.com/lashkapashka/divideBill/internal/model"
 	"github.com/lashkapashka/divideBill/pkg/client"
+	"github.com/lashkapashka/divideBill/pkg/split"
 )
 
 // type DivideService struct {
@@ -30,5 +31,9 @@ func DivideService() {
 		panic(err)
 	}
 
-	fmt.Println(dish)
+	mp1 := split.SplitPosition([]string{"Garlic Bread"}, &dish)
+	mp2 := split.SplitAccount(&dish)
+
+	fmt.Println("Деление по позиции: ", mp1)
+	fmt.Println("Деление по счёту: ", mp2)
 }
