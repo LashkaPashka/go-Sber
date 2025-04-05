@@ -1,6 +1,7 @@
 package client
 
 import (
+	"bytes"
 	"context"
 	"io"
 	"log"
@@ -9,8 +10,8 @@ import (
 	"time"
 )
 
-func Client() string {
-	url := "http://localhost:8080"
+func ClientGet(key string) string {
+	url := "http://localhost:8000/cache/get-data/" + key
 
 	// Запрос с разными настройками.
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -53,4 +54,28 @@ func Client() string {
 
 func defaultTransportDialContext(dialer *net.Dialer) func(context.Context, string, string) (net.Conn, error) {
 	return dialer.DialContext
+}
+
+
+func ClientPost(key, post string) {
+	url := "http://localhost:8000/cache/set-data/" + key
+
+	r, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(post)))
+	if err != nil {
+		panic(err)
+	}
+
+	r.Header.Add("Content-Type", "application/json")
+
+	client := &http.Client{}
+	res, err := client.Do(r)
+	if err != nil {
+		panic(err)
+	}
+
+	defer res.Body.Close()
+
+	// if res.StatusCode != http.StatusCreated {
+	// 	panic(res.Status)
+	// }
 }

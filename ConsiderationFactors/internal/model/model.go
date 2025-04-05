@@ -2,14 +2,14 @@ package model
 
 
 type Factors struct {
-	Discounts []Discounts
-	Tips []Tips
-	Promtions []Promtions
+	Discounts []Discounts `json:"discounts"`
+	Tips []Tips `json:"tips"`
+	Promtions []Promtions `json:"promtions"`
 }
 
 type Discounts struct {
 	Name string `json:"name"`
-	Number float64 `json:"number"`
+	Number int `json:"number"`
 }
 
 type Tips struct {
@@ -23,16 +23,15 @@ type Promtions struct {
 
 ///////////////////////////////
 
-type DataDishes struct {
-	NumberClients int
-	Total_account int
-	Products []Products
+type Products struct {
+	Name string `json:"name"`
+	NumberServings int `json:"numberServings"`
+	Price int `json:"price"`
+	TotalPrice int `json:"total"`
 }
 
-type Products struct {
-	GuestID int
-	Name string
-	NumberServings int
-	Price int
-	TotalPrice int
+type DataDishes struct {
+	NumberClients int `json:"numberClients"`
+	Total_account int `json:"total_account"`
+	Products []Products `json:"products"`
 }

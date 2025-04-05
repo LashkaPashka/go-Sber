@@ -1,0 +1,20 @@
+{
+    "discounts": [
+      {
+        "name": "Coca-Cola",
+        "number": 10
+      },
+      {
+        "name": "Espresso",
+        "number": 15
+      }
+    ],
+    "tips": [
+      {
+        "number": 500
+      },
+      {
+        "number": 100
+      }
+    ]
+  }
