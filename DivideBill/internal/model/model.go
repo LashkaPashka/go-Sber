@@ -14,6 +14,6 @@ type DataDishes struct {
 }
 
 type Response struct {
-	Position string
-	Account string
+	Position map[string]int
+	Account map[string]int
 }
