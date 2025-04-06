@@ -13,6 +13,6 @@ def generate_hash(n: int) -> str:
 
 def create_link() -> str:
     hash = generate_hash(10)
-    url = f"http://localhost:8000/{hash}"
+    url = f"http://localhost:8000/small-router/{hash}"
     
     return url
