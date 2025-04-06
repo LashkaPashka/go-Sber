@@ -16,6 +16,3 @@ def create_link() -> str:
     url = f"http://localhost:8000/{hash}"
     
     return url
-    
-    
-print(create_link())

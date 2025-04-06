@@ -27,6 +27,6 @@ def set_data(key: str, cache: Any = Body(...)):
 
     time = timedelta(minutes=120)
     r = redis.Redis(host=host, port=port, password=password, decode_responses=True)
-    r.set(name=key, value=json.dumps(cache), ex=time)
+    r.set(name=f"cheque:{key}", value=json.dumps(cache), ex=time)
     
     return "Данные отправились в кэш"
