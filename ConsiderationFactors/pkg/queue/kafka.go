@@ -37,7 +37,6 @@ func New(brokers []string, topic string, groupId string) (*Client, error) {
 		AllowAutoTopicCreation: true,
 	}
 
-
 	return &c, nil
 }
 

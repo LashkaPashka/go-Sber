@@ -23,7 +23,7 @@ func (d *DivideService) Divide() string{
 	
 	dish := parserstring.ParserString[model.DataDishes](resp)
 
-	mapPosition := split.SplitPosition([]string{"Tiramisu"}, dish)
+	mapPosition := split.SplitPosition([]string{"Espresso"}, dish)
 	mapAccount := split.SplitAccount(dish)
 
 	msg := model.Response{

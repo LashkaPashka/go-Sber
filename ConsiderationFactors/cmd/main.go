@@ -16,7 +16,6 @@ func main() {
 	fmt.Println(data)
 }
 
-
 func main1() {
 	server := server.New()
 	

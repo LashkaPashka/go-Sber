@@ -3,6 +3,7 @@ package client
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -10,8 +11,8 @@ import (
 	"time"
 )
 
-func ClientGet(key string) string {
-	url := "http://localhost:8000/cache/get-data/" + key
+func ClientGet(port, path string) string {
+	url := fmt.Sprintf("http://localhost%s/%s", port, path)
 
 	// Запрос с разными настройками.
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -57,8 +58,8 @@ func defaultTransportDialContext(dialer *net.Dialer) func(context.Context, strin
 }
 
 
-func ClientPost(key, post string) {
-	url := "http://localhost:8000/cache/set-data/" + key
+func ClientPost(port, path, post string) {
+	url := fmt.Sprintf("http://localhost%s/%s", port, path)
 
 	r, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(post)))
 	if err != nil {
@@ -74,8 +75,4 @@ func ClientPost(key, post string) {
 	}
 
 	defer res.Body.Close()
-
-	// if res.StatusCode != http.StatusCreated {
-	// 	panic(res.Status)
-	// }
 }

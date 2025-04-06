@@ -6,7 +6,7 @@ import (
 	"github.com/lashkapshka/go-Sber/internal/model"
 	"github.com/lashkapshka/go-Sber/internal/repository"
 	"github.com/lashkapshka/go-Sber/pkg/client"
-	consfactors "github.com/lashkapshka/go-Sber/pkg/consFactors"
+	"github.com/lashkapshka/go-Sber/pkg/consFactors"
 	"github.com/lashkapshka/go-Sber/pkg/parserString"
 )
 
@@ -17,15 +17,15 @@ type FactorsService struct {
 func New() *FactorsService{
 	return &FactorsService{
 		repo: repository.New(),
+
 	}
 }
 
-func (s *FactorsService) DivideBill(msg string) *model.DataDishes{
+func (s *FactorsService) DivideBill(msg string) string{
 	//nameID := strings.Split(msg, " ")
 	
-	factors := parserString.Parser[model.Factors](client.ClientGet("factors"))
-
-	dataDishes := parserString.Parser[model.DataDishes](client.ClientGet("key"))
+	factors := parserString.Parser[model.Factors](client.ClientGet(":8000", "cache/get-data/factors"))
+	dataDishes := parserString.Parser[model.DataDishes](client.ClientGet(":8000", "cache/get-data/key"))
 
 	switch {
 		case factors != nil && factors.Discounts != nil:
@@ -35,11 +35,11 @@ func (s *FactorsService) DivideBill(msg string) *model.DataDishes{
 			dataDishes.Total_account = consfactors.CalculateTips(dataDishes.Total_account, factors.Tips)
 		default:
 			log.Println("в модели factors ничего нет")
-			return nil
+			return ""
 	}
 
-	client.ClientPost("key", parserString.ConvertJSON(dataDishes))
-	log.Println("данные обновлены в Redis")
+	client.ClientPost(":8000", "cache/set-data/key", parserString.ConvertJSON(dataDishes))
+	dataDivideBill := client.ClientGet(":8085", "/divide-bill")
 
-	return dataDishes
+	return dataDivideBill
 }
