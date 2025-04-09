@@ -1,11 +1,12 @@
 import requests
+import json
 from api.requestToRedis.schemas import SCache
 from fastapi import status, HTTPException
 
 def save_data(model: SCache, hash: str) -> str:
-    url = f"http://localhost:8000/cache/set-data/{hash}"
+    url = f"http://localhost:8000/cache/set-data/cheque:{hash}"
     
-    payload = model.model_dump_json()
+    payload = model.dict()
     resonse = requests.post(url, json=payload)
     
     if resonse.status_code != status.HTTP_200_OK:

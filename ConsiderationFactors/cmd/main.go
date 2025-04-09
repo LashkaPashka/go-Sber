@@ -1,26 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/lashkapshka/go-Sber/internal/server"
-	"github.com/lashkapshka/go-Sber/internal/service"
 )
 
 func main() {
-	service := service.New()
-
-	data := service.DivideBill("name1")
-
-	fmt.Println(data)
-}
-
-func main1() {
 	server := server.New()
 	
 	//Kafka
-	log.Println("Kafka's running")	
+	log.Println("Kafka's running on port 8050")	
 	server.Consumer()
 
 	// Server's running

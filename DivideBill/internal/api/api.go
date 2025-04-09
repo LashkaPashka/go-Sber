@@ -34,8 +34,10 @@ func (api *API) Run(addr string) error {
 
 func (api *API) GetDivideBill() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		msg := api.service.Divide()
+		hash := r.Header.Get("Hash-cheque")
 
+		msg := api.service.Divide(hash)
+		
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(msg))

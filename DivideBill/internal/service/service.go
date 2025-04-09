@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/lashkapashka/divideBill/internal/model"
 	"github.com/lashkapashka/divideBill/pkg/ParserString"
 	"github.com/lashkapashka/divideBill/pkg/client"
@@ -18,8 +20,8 @@ func New() *DivideService {
 	}
 }
 
-func (d *DivideService) Divide() string{	
-	resp := client.Client("http://localhost:8000/cache/get-data/key")
+func (d *DivideService) Divide(hash string) string{	
+	resp := client.Client(fmt.Sprintf("http://localhost:8000/cache/get-data/cheque:%s", hash))
 	
 	dish := parserstring.ParserString[model.DataDishes](resp)
 

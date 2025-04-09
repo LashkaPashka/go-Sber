@@ -15,7 +15,7 @@ type Server struct {
 func New() *Server {
 	kaf, err := queue.New(
 		[]string{"localhost:9092"},
-		"test-topic",
+		"topic-factors",
 		"consumer-group",
 	)
 
@@ -33,7 +33,7 @@ func New() *Server {
 }
 
 func (s *Server) Run() {
-	s.api.Run(":8080")
+	s.api.Run(":8050")
 }
 
 func (s *Server) Consumer() {

@@ -16,7 +16,7 @@ def work(modelCheque: SCache):
     
     ## Создаём ссылку 
     url = createLink.create_link()
-    hash = url.split("http://localhost:8000/small-router/")
+    hash = url.split("http://localhost:8090/small-router/")
     
     ##Сохраняем в redis
     saveData.save_data(modelCheque, hash[1])

@@ -35,3 +35,12 @@ type DataDishes struct {
 	Total_account int `json:"total_account"`
 	Products []Products `json:"products"`
 }
+
+/////////////////////////////////
+
+type ClientHost struct {
+	Port int
+	Path string
+	Obj string
+	Hash string
+}

@@ -1,11 +1,13 @@
 import requests
 import json
 from fastapi import status, HTTPException
+from api.schemas.factors import SCache
 
-def save_data(model: any, hash: str) -> str:
-    url = f"http://localhost:8000/cache/set-data/{hash}"
+
+def save_data(model: SCache, hash: str) -> str:
+    url = f"http://localhost:8000/cache/set-data/factors:{hash}"
     
-    payload = json.dumps(model)
+    payload = model.dict()
     resonse = requests.post(url, json=payload)
     
     if resonse.status_code != status.HTTP_200_OK:

@@ -5,6 +5,18 @@ import (
 	"log"
 )
 
+func ParseStringMap(data string) map[string]string {
+	var mp map[string]string
+	
+	if err := json.Unmarshal([]byte(data), &mp); err != nil {
+		log.Println("не удалось преобразовать в модель")
+		return nil
+	}
+
+	return mp
+}
+
+
 func Parser[T any](data string) *T{
 	var dataModel T
 	var unscapped string

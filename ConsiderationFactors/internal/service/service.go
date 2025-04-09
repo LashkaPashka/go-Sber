@@ -1,13 +1,14 @@
 package service
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/lashkapshka/go-Sber/internal/model"
 	"github.com/lashkapshka/go-Sber/internal/repository"
 	"github.com/lashkapshka/go-Sber/pkg/client"
-	"github.com/lashkapshka/go-Sber/pkg/consFactors"
 	"github.com/lashkapshka/go-Sber/pkg/parserString"
+	"github.com/lashkapshka/go-Sber/pkg/consFactors"
 )
 
 type FactorsService struct {
@@ -21,11 +22,11 @@ func New() *FactorsService{
 	}
 }
 
-func (s *FactorsService) DivideBill(msg string) string{
-	//nameID := strings.Split(msg, " ")
-	
-	factors := parserString.Parser[model.Factors](client.ClientGet(":8000", "cache/get-data/factors"))
-	dataDishes := parserString.Parser[model.DataDishes](client.ClientGet(":8000", "cache/get-data/key"))
+func (s *FactorsService) DivideBill(mpHash string) string{
+	mp := parserString.ParseStringMap(mpHash)
+
+	factors := parserString.Parser[model.Factors](client.ClientGetRedis(":8000", "cache/get-data/factors", mp["hash"]))
+	dataDishes := parserString.Parser[model.DataDishes](client.ClientGetRedis(":8000", "cache/get-data/cheque", mp["hash"]))
 
 	switch {
 		case factors != nil && factors.Discounts != nil:
@@ -38,8 +39,9 @@ func (s *FactorsService) DivideBill(msg string) string{
 			return ""
 	}
 
-	client.ClientPost(":8000", "cache/set-data/key", parserString.ConvertJSON(dataDishes))
-	dataDivideBill := client.ClientGet(":8085", "/divide-bill")
-
-	return dataDivideBill
+	client.ClientPost(":8000", fmt.Sprintf("cache/set-data/cheque:%s", mp["hash"]), parserString.ConvertJSON(dataDishes))
+	dataDivideBill := client.ClientGetGo(":8085", "/divide-bill", mp["hash"])
+	
+	fmt.Println(dataDivideBill)
+	return ""
 }
