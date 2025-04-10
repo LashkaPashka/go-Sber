@@ -42,6 +42,5 @@ func (s *FactorsService) DivideBill(mpHash string) string{
 	client.ClientPost(":8000", fmt.Sprintf("cache/set-data/cheque:%s", mp["hash"]), parserString.ConvertJSON(dataDishes))
 	dataDivideBill := client.ClientGetGo(":8085", "/divide-bill", mp["hash"])
 	
-	fmt.Println(dataDivideBill)
-	return ""
+	return dataDivideBill
 }

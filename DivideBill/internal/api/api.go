@@ -1,9 +1,11 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/lashkapashka/divideBill/internal/model"
 	"github.com/lashkapashka/divideBill/internal/service"
 )
 
@@ -25,7 +27,7 @@ func New() *API {
 }
 
 func EndPoints(api API) {
-	api.router.HandleFunc("/divide-bill", api.GetDivideBill()).Methods(http.MethodGet)
+	api.router.HandleFunc("/divide-bill", api.GetDivideBill()).Methods(http.MethodPost)
 }
 
 func (api *API) Run(addr string) error {
@@ -33,10 +35,16 @@ func (api *API) Run(addr string) error {
 }
 
 func (api *API) GetDivideBill() http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		hash := r.Header.Get("Hash-cheque")
-
-		msg := api.service.Divide(hash)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {		
+		var req model.RequestBody
+		err := json.NewDecoder(r.Body).Decode(&req)
+		
+		if err != nil {
+			panic(err)
+		}
+	
+		
+		msg := api.service.Divide(req)
 		
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

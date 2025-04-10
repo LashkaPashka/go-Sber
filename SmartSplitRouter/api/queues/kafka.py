@@ -51,6 +51,7 @@ class Kafka():
                             raise KafkaException(msg.error())
                     else:
                         print(f"Received message: {msg.value().decode('utf-8')}")
+                        break
             except KeyboardInterrupt:
                 pass
             finally:

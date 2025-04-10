@@ -20,13 +20,13 @@ func New() *DivideService {
 	}
 }
 
-func (d *DivideService) Divide(hash string) string{	
-	resp := client.Client(fmt.Sprintf("http://localhost:8000/cache/get-data/cheque:%s", hash))
+func (d *DivideService) Divide(req model.RequestBody) string{	
+	resp := client.Client(fmt.Sprintf("http://localhost:8000/cache/get-data/cheque:%s", req.Hash))
 	
 	dish := parserstring.ParserString[model.DataDishes](resp)
 
-	mapPosition := split.SplitPosition([]string{"Espresso"}, dish)
-	mapAccount := split.SplitAccount(dish)
+	mapPosition := split.SplitPosition([]string{"Espresso"}, dish, &req)
+	mapAccount := split.SplitAccount(dish, &req)
 
 	msg := model.Response{
 		Position: mapPosition,

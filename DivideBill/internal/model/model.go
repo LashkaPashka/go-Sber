@@ -17,3 +17,9 @@ type Response struct {
 	Position map[string]int
 	Account map[string]int
 }
+
+type RequestBody struct {
+	Hash string `json:"Hash"`
+	NumberClients int `json:"number_clients"`
+	UseClients int `json:"user_clients"`
+}

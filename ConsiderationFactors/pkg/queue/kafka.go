@@ -59,7 +59,10 @@ func (c *Client) Consumer() {
 		}
 
 		log.Println(string(msg.Value))
-		c.service.DivideBill(string(msg.Value))
+		msgProducer := c.service.DivideBill(string(msg.Value))
+
+		log.Println(msgProducer)
+		//c.Producer(msgProducer)
 
 		err = c.Reader.CommitMessages(context.Background(), msg)
 		if err != nil {

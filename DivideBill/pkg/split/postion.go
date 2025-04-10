@@ -6,7 +6,7 @@ import (
 	"github.com/lashkapashka/divideBill/internal/model"
 )
 
-func SplitPosition(names []string, dishes *model.DataDishes) map[string]int {
+func SplitPosition(names []string, dishes *model.DataDishes, req *model.RequestBody) map[string]int {
 	var mp = make(map[string]int)
 
 	// Кэшируем цены продуктов по имени
@@ -24,8 +24,8 @@ func SplitPosition(names []string, dishes *model.DataDishes) map[string]int {
 	}
 
 	// Основные циклы
-	for i := 1; i <= dishes.NumberClients; i++ {
-		for j := i + 1; j <= dishes.NumberClients; j++ {
+	for i := 1; i <= req.UseClients; i++ {
+		for j := i + 1; j <= req.NumberClients; j++ {
 			totalPrice := totalSum * (float64(i) / float64(j))
 			key := fmt.Sprintf("%d/%d", i, j)
 			mp[key] = int(totalPrice)
