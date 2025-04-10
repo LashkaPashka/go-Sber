@@ -1,11 +1,11 @@
-package parserstring
+package Serializer
 
 import (
 	"encoding/json"
 	"log"
 )
 
-func ConvertJSON(data any) string {
+func Serialize(data any) string {
 	mJson, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err.Error())
@@ -15,7 +15,7 @@ func ConvertJSON(data any) string {
 	return string(mJson)
 }
 
-func ParserString[T any](dataString string) *T {
+func Deserialize[T any](dataString string) T {
 	var dataModel T
 	var unescaped string
 
@@ -27,5 +27,5 @@ func ParserString[T any](dataString string) *T {
 		panic(err)
 	}
 
-	return &dataModel
+	return dataModel
 }

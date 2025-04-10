@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response, Request
 from datetime import timedelta
 from api.schemas.PositionPrice import PositionPrice
-from api.queues.kafka import Kafka
+from api.queues.rabbit import RabbitMQ
 
 
 router = APIRouter(
@@ -19,4 +19,7 @@ def routing(response: Response, hash: str):
 def get_price_position(request: Request, pos: PositionPrice):
     hash = request.cookies.get("hash")
     
+    rabbit = RabbitMQ()
+    
+    rabbit.Publish("topic-divide", {"hash": hash, "numClients": str(pos.num_clients), "useClients": str(pos.use_clients)})
     #kafka.Subscriber(["topic-factors"])

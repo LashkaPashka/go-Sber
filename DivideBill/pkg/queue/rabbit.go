@@ -7,11 +7,14 @@ import (
 	"time"
 
 	"github.com/lashkapashka/divideBill/internal/model"
+	"github.com/lashkapashka/divideBill/internal/service"
+	"github.com/lashkapashka/divideBill/pkg/Serializer"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type RabbitMQ struct {
 	ch *amqp.Channel
+	service *service.DivideService
 }
 
 func failOnError(err error, msg string) {
@@ -21,15 +24,15 @@ func failOnError(err error, msg string) {
   }
 
 func New() *RabbitMQ{
-	var rabbit RabbitMQ
+	var rabbit RabbitMQ = RabbitMQ{
+		service: service.NewDivideService(),
+	}
 
 	conn, err := amqp.Dial("amqp://user:password@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
-	defer conn.Close()
 
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
-	defer ch.Close()
 
 	rabbit.ch = ch
 	
@@ -52,6 +55,7 @@ func (r *RabbitMQ) Producer(msg model.Response) {
 
 	msgValue, err := json.Marshal(msg)
 	failOnError(err, "couldn't convert the message")
+	defer r.ch.Close()
 
 	err = r.ch.PublishWithContext(ctx,
 		"",
@@ -87,14 +91,18 @@ func (r *RabbitMQ) Consumer() {
 	)
 	failOnError(err, "Failed to register a consumer")
 
-	
+	defer r.ch.Close()
+
 	go func() {
 		for d := range msgs {
-		  log.Printf("Received a message: %s", d.Body)
+			//log.Printf("Received a message: %s", d.Body)
+			req := Serializer.Deserialize[map[string]string](string(d.Body))
+			
+			data := r.service.Divide(req)
+			log.Println(data)
 		}
 	  }()
 	
 	log.Println("Waiting for messages.")
-	
 	select{}
 }

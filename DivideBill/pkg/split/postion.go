@@ -7,7 +7,7 @@ import (
 	"github.com/lashkapashka/divideBill/internal/model"
 )
 
-func SplitPosition(names []string, dishes *model.DataDishes, req map[string]string) map[string]int {
+func SplitPosition(names []string, dishes model.DataDishes, req map[string]string) map[string]int {
 	numberClients, _ := strconv.Atoi(req["numClients"])
 	useClients, _ := strconv.Atoi(req["useClients"])
 	

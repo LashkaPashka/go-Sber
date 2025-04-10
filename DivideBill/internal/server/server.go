@@ -24,5 +24,5 @@ func (s *Server) Run() {
 }
 
 func (s *Server) Consumer() {
-	go s.rabbit.Consumer()
+	s.rabbit.Consumer()
 }

@@ -8,7 +8,7 @@ import (
 )
 
 
-func SplitAccount(dish *model.DataDishes, req map[string]string) map[string]int {
+func SplitAccount(dish model.DataDishes, req map[string]string) map[string]int {
 	numberClients, _ := strconv.Atoi(req["numClients"])
 	useClients, _ := strconv.Atoi(req["useClients"])
 	
