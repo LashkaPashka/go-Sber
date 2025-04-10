@@ -19,7 +19,7 @@ type Response struct {
 }
 
 type RequestBody struct {
-	Hash string `json:"Hash"`
+	Hash string `json:"hash"`
 	NumberClients int `json:"number_clients"`
-	UseClients int `json:"user_clients"`
+	UseClients int `json:"use_clients"`
 }

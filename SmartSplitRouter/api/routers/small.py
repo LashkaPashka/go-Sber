@@ -18,7 +18,5 @@ def routing(response: Response, hash: str):
 @router.post("/get-price-position")
 def get_price_position(request: Request, pos: PositionPrice):
     hash = request.cookies.get("hash")
-    kafka = Kafka(["localhost:9092"])
-    kafka.Publisher("topic-factors", {"hash": hash, "numClients": str(pos.num_clients), "useClients": str(pos.use_clients)})
     
     #kafka.Subscriber(["topic-factors"])

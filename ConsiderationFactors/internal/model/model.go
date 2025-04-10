@@ -44,3 +44,9 @@ type ClientHost struct {
 	Obj string
 	Hash string
 }
+
+type RequestBody struct {
+	Hash string `json:"hash"`
+	NumberClients int `json:"number_clients"`
+	UseClients int `json:"use_clients"`
+}

@@ -2,11 +2,15 @@ package split
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/lashkapashka/divideBill/internal/model"
 )
 
-func SplitPosition(names []string, dishes *model.DataDishes, req *model.RequestBody) map[string]int {
+func SplitPosition(names []string, dishes *model.DataDishes, req map[string]string) map[string]int {
+	numberClients, _ := strconv.Atoi(req["numClients"])
+	useClients, _ := strconv.Atoi(req["useClients"])
+	
 	var mp = make(map[string]int)
 
 	// Кэшируем цены продуктов по имени
@@ -14,7 +18,6 @@ func SplitPosition(names []string, dishes *model.DataDishes, req *model.RequestB
 	for _, p := range dishes.Products {
 		priceMap[p.Name] = p.TotalPrice
 	}
-
 	// Предвычисляем сумму
 	totalSum := 0.0
 	for _, name := range names {
@@ -23,14 +26,9 @@ func SplitPosition(names []string, dishes *model.DataDishes, req *model.RequestB
 		}
 	}
 
-	// Основные циклы
-	for i := 1; i <= req.UseClients; i++ {
-		for j := i + 1; j <= req.NumberClients; j++ {
-			totalPrice := totalSum * (float64(i) / float64(j))
-			key := fmt.Sprintf("%d/%d", i, j)
-			mp[key] = int(totalPrice)
-		}
-	}
+	totalPrice := totalSum * (float64(numberClients) / float64(useClients))
+	key := fmt.Sprintf("%d/%d", numberClients, useClients)
+	mp[key] = int(totalPrice)
 
 	return mp
 }

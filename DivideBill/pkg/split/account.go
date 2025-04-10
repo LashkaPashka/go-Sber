@@ -2,22 +2,22 @@ package split
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/lashkapashka/divideBill/internal/model"
 )
 
 
-func SplitAccount(dish *model.DataDishes, req *model.RequestBody) map[string]int {
+func SplitAccount(dish *model.DataDishes, req map[string]string) map[string]int {
+	numberClients, _ := strconv.Atoi(req["numClients"])
+	useClients, _ := strconv.Atoi(req["useClients"])
+	
 	var mp = make(map[string]int)
-	var total_price float64
 
-	for i := 1; i <= req.UseClients; i++ {
-		for j := i+1; j <= req.NumberClients; j++ {
-			total_price = dish.Total_account * (float64(i)/float64(j))
+	total_price := dish.Total_account * (float64(numberClients)/float64(useClients))
 
-			mp[fmt.Sprintf("%d/%d", i, j)] = int(total_price)
-		}
-	}
+	mp[fmt.Sprintf("%d/%d", numberClients, useClients)] = int(total_price)
+
 
 	return mp
 }

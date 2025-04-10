@@ -7,8 +7,8 @@ import (
 	"github.com/lashkapshka/go-Sber/internal/model"
 	"github.com/lashkapshka/go-Sber/internal/repository"
 	"github.com/lashkapshka/go-Sber/pkg/client"
-	"github.com/lashkapshka/go-Sber/pkg/parserString"
 	"github.com/lashkapshka/go-Sber/pkg/consFactors"
+	"github.com/lashkapshka/go-Sber/pkg/parserString"
 )
 
 type FactorsService struct {
@@ -40,7 +40,7 @@ func (s *FactorsService) DivideBill(mpHash string) string{
 	}
 
 	client.ClientPost(":8000", fmt.Sprintf("cache/set-data/cheque:%s", mp["hash"]), parserString.ConvertJSON(dataDishes))
-	dataDivideBill := client.ClientGetGo(":8085", "/divide-bill", mp["hash"])
+	//dataDivideBill := client.ClientPostDivideBill(":8085", "divide-bill", parserString.ConvertJSON(mp))
 	
-	return dataDivideBill
+	return ""
 }

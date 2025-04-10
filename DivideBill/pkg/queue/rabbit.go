@@ -68,7 +68,7 @@ func (r *RabbitMQ) Producer(msg model.Response) {
 
 func (r *RabbitMQ) Consumer() {
 	q, err := r.ch.QueueDeclare(
-		"hello",
+		"topic-divide",
 		false,   // durable
 		false,   // delete when unused
 		false,   // exclusive
@@ -87,6 +87,7 @@ func (r *RabbitMQ) Consumer() {
 	)
 	failOnError(err, "Failed to register a consumer")
 
+	
 	go func() {
 		for d := range msgs {
 		  log.Printf("Received a message: %s", d.Body)
@@ -94,5 +95,6 @@ func (r *RabbitMQ) Consumer() {
 	  }()
 	
 	log.Println("Waiting for messages.")
+	
 	select{}
 }
