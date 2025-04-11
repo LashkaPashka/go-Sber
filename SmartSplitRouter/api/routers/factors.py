@@ -9,9 +9,9 @@ router = APIRouter(
 )
 
 @router.post("/set")
-def factors(request: Request, cache: SCache):
+def apply_discounts_and_tips(request: Request, cache: SCache):
     hash = request.cookies.get("hash")
-    res = save_data(cache, hash)
+    _ = save_data(cache, hash)
     kafka = Kafka(["localhost:9092"])
     kafka.Publisher("topic-factors", {"hash": hash})
     

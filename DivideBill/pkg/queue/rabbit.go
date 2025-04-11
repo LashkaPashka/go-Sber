@@ -97,7 +97,7 @@ func (r *RabbitMQ) Consumer() {
 			//log.Printf("Received a message: %s", d.Body)
 			req := Serializer.Deserialize[map[string]string](string(d.Body))
 			
-			data := r.service.Divide(req)
+			data := r.service.GetPosition(req)
 			log.Println(data)
 
 			r.Producer(data)

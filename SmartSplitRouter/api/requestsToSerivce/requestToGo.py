@@ -3,8 +3,8 @@ import requests
 from typing import Any
 from fastapi import status, HTTPException
 
-def fetchFromService(body: Any):
-    url = "http://localhost:8085/divide-bill"
+def fetchFromService(path: str, body: Any):
+    url = f"http://localhost:8085/{path}"
     
     response = requests.post(url=url, json=body, headers={"Content-Type": "application/json"})
     

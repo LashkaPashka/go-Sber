@@ -26,14 +26,15 @@ func New() *API {
 }
 
 func EndPoints(api API) {
-	api.router.HandleFunc("/divide-bill", api.GetDivideBill()).Methods(http.MethodPost)
+	api.router.HandleFunc("/split-position", api.GetDividePosition()).Methods(http.MethodPost)
+	api.router.HandleFunc("/split-account", api.GetDivideAccount()).Methods(http.MethodPost)
 }
 
 func (api *API) Run(addr string) error {
 	return http.ListenAndServe(addr, api.router)
 }
 
-func (api *API) GetDivideBill() http.HandlerFunc {
+func (api *API) GetDividePosition() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {		
 		var req map[string]string
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -42,8 +43,26 @@ func (api *API) GetDivideBill() http.HandlerFunc {
 			panic(err)
 		}
 		
-		msg := api.service.Divide(req)
+		msg := api.service.GetPosition(req)
 
+		log.Println(msg)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(msg))
+	})
+}
+
+func (api *API) GetDivideAccount() http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {		
+		var req map[string]string
+		err := json.NewDecoder(r.Body).Decode(&req)
+		
+		if err != nil {
+			panic(err)
+		}
+		
+		msg := api.service.GetAccount(req)
 		log.Println(msg)
 
 		w.Header().Set("Content-Type", "application/json")

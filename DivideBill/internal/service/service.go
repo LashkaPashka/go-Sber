@@ -17,20 +17,26 @@ func NewDivideService() *DivideService {
 	return &DivideService{}
 }
 
-func (s DivideService) Divide(req map[string]string) string{	
+func (s DivideService) GetPosition(req map[string]string) string{	
 	resp := client.Client(fmt.Sprintf("http://localhost:8000/cache/get-data/cheque:%s", req["hash"]))
 	
 	dish := Serializer.Deserialize[model.DataDishes](resp)
 
 	mapPosition := split.SplitPosition(req["position"], dish, req)
+
+	msgString := Serializer.Serialize(mapPosition)
+	
+	return msgString
+}
+
+func (s DivideService) GetAccount(req map[string]string) string{	
+	resp := client.Client(fmt.Sprintf("http://localhost:8000/cache/get-data/cheque:%s", req["hash"]))
+	
+	dish := Serializer.Deserialize[model.DataDishes](resp)
+
 	mapAccount := split.SplitAccount(dish, req)
 
-	msg := model.Response{
-		Position: mapPosition,
-		Account: mapAccount,
-	}
-	
-	msgString := Serializer.Serialize(msg)
+	msgString := Serializer.Serialize(mapAccount)
 	
 	return msgString
 }

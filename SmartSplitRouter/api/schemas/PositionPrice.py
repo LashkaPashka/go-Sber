@@ -1,7 +1,10 @@
 from pydantic import BaseModel
 
-class PositionPrice(BaseModel):
+class SPosition(BaseModel):
     position: str
-    use_clients: int
     num_clients: int
+    use_clients: int
     
+class SAccount(BaseModel):
+    num_clients: int
+    use_clients: int
