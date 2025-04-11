@@ -22,7 +22,7 @@ func (s DivideService) Divide(req map[string]string) string{
 	
 	dish := Serializer.Deserialize[model.DataDishes](resp)
 
-	mapPosition := split.SplitPosition([]string{"Espresso"}, dish, req)
+	mapPosition := split.SplitPosition(req["position"], dish, req)
 	mapAccount := split.SplitAccount(dish, req)
 
 	msg := model.Response{

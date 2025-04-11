@@ -19,6 +19,6 @@ def routing(response: Response, hash: str):
 def get_price_position(request: Request, pos: PositionPrice):
     hash = request.cookies.get("hash")
     
-    data = fetchFromService({"hash": hash, "numClients": pos.num_clients, "useClients": pos.use_clients})
+    data = fetchFromService({"hash": hash, "position": pos.position, "numClients": str(pos.num_clients), "useClients": str(pos.use_clients)})
 
     return data

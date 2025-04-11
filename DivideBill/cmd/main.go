@@ -9,7 +9,7 @@ import (
 func main() {
 	server := server.New()
 	
-	log.Println("RabbitMQ's running")
+	//log.Println("RabbitMQ's running")
 	//server.Consumer()
 
 	log.Println("Server's running 8085")

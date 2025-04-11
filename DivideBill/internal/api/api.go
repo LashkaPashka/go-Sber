@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -42,6 +43,8 @@ func (api *API) GetDivideBill() http.HandlerFunc {
 		}
 		
 		msg := api.service.Divide(req)
+
+		log.Println(msg)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

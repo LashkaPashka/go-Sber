@@ -15,5 +15,4 @@ def factors(request: Request, cache: SCache):
     kafka = Kafka(["localhost:9092"])
     kafka.Publisher("topic-factors", {"hash": hash})
     
-    kafka.Subscriber(["topic-factors"])
-    return res
+    return "Факторы применены"

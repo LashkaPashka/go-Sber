@@ -7,7 +7,7 @@ import (
 	"github.com/lashkapashka/divideBill/internal/model"
 )
 
-func SplitPosition(names []string, dishes model.DataDishes, req map[string]string) map[string]int {
+func SplitPosition(name string, dishes model.DataDishes, req map[string]string) map[string]int {
 	numberClients, _ := strconv.Atoi(req["numClients"])
 	useClients, _ := strconv.Atoi(req["useClients"])
 	
@@ -20,12 +20,10 @@ func SplitPosition(names []string, dishes model.DataDishes, req map[string]strin
 	}
 	// Предвычисляем сумму
 	totalSum := 0.0
-	for _, name := range names {
-		if price, ok := priceMap[name]; ok {
-			totalSum += price
-		}
+	if price, ok := priceMap[name]; ok {
+		totalSum = price
 	}
-
+	
 	totalPrice := totalSum * (float64(numberClients) / float64(useClients))
 	key := fmt.Sprintf("%d/%d", numberClients, useClients)
 	mp[key] = int(totalPrice)
