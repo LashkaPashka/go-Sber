@@ -1,5 +1,6 @@
 import pika
 import json
+import os
 
 class RabbitMQ:
     def __init__(self):
@@ -9,6 +10,8 @@ class RabbitMQ:
         self.port = 5672
         self.connection = None
         self.channel = None
+        self.STORAGE_FILE = "processed.json"
+        self.processed_ids = self.load_processed()
         self.connect()
 
     def connect(self):
@@ -43,18 +46,39 @@ class RabbitMQ:
                                        delivery_mode=2,
                                    ))
         print(f"Sent message to queue {queue_name}: {message}")
+    # Загрузить уже обработанные ID из файла
+    def load_processed(self):
+        if os.path.exists(self.STORAGE_FILE):
+            with open(self.STORAGE_FILE, "r") as f:
+                return set(json.load(f))
+        return set()
+
+    # Сохранить новые обработанные ID
+    def save_processed(self, processed_ids):
+        with open(self.STORAGE_FILE, "w") as f:
+            json.dump(list(processed_ids), f)
+
+    def Consumer(self, queue_name) -> dict:        
+        self.channel.queue_declare(queue=queue_name)
+
+        method_frame, header_frame, body = self.channel.basic_get(queue=queue_name, auto_ack=False)
+        self.channel.queue_purge(queue=queue_name)
         
-    
-    def Consumer(self):
-        def callback(ch, method, properties, body):
-            print(f"Получено сообщение: {body.decode()}")
+        if method_frame:
+            msg_id = header_frame.message_id
 
-        connection = pika.BlockingConnection(pika.ConnectionParameters("localhost", 5672))
-        channel = connection.channel()
+            if msg_id in self.processed_ids:
+                print("❗️ Дубликат — отклоняем")
+                self.channel.basic_ack(delivery_tag=method_frame.delivery_tag)
+            else:
+                print("✅ Уникальное сообщение — обрабатываем")
+                self.processed_ids.add(msg_id)
+                self.save_processed(self.processed_ids)
 
-        channel.queue_declare(queue="test_queue")
-
-        channel.basic_consume(queue="test_queue", on_message_callback=callback, auto_ack=True)
-
-        print("Ожидание сообщений. Для выхода нажми CTRL+C")
-        channel.start_consuming()
+                # Здесь логика обработки
+                self.channel.basic_ack(delivery_tag=method_frame.delivery_tag)
+                return body.decode()
+        else:
+            print("Очередь пуста.")
+        
+        self.connection.close()

@@ -31,6 +31,6 @@ func (s DivideService) Divide(req map[string]string) string{
 	}
 	
 	msgString := Serializer.Serialize(msg)
-	//d.rabbit.Producer(msg)
+	
 	return msgString
 }

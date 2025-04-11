@@ -6,7 +6,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/lashkapashka/divideBill/internal/model"
 	"github.com/lashkapashka/divideBill/internal/service"
 	"github.com/lashkapashka/divideBill/pkg/Serializer"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -39,9 +38,9 @@ func New() *RabbitMQ{
 	return &rabbit
 }
 
-func (r *RabbitMQ) Producer(msg model.Response) {
+func (r *RabbitMQ) Producer(msg string) {
 	q, err := r.ch.QueueDeclare(
-		"topic-divide",
+		"topic-divide-res",
 		false,
 		false,
 		false,   
@@ -55,7 +54,6 @@ func (r *RabbitMQ) Producer(msg model.Response) {
 
 	msgValue, err := json.Marshal(msg)
 	failOnError(err, "couldn't convert the message")
-	defer r.ch.Close()
 
 	err = r.ch.PublishWithContext(ctx,
 		"",
@@ -64,6 +62,7 @@ func (r *RabbitMQ) Producer(msg model.Response) {
 		false,
 		amqp.Publishing{
 			ContentType: "text/plain",
+			MessageId: "msg-12345",
 			Body: msgValue,
 		})
 	failOnError(err, "Failed to publish a message")
@@ -100,6 +99,8 @@ func (r *RabbitMQ) Consumer() {
 			
 			data := r.service.Divide(req)
 			log.Println(data)
+
+			r.Producer(data)
 		}
 	  }()
 	
