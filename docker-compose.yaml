@@ -38,6 +38,31 @@ services:
   
   ocr:
     build: 
+      context: .
+      dockerfile: ./OCR/Dockerfile
+    image: ocr
+    container_name: ocr_api
+    ports:
+      - 8080:8080
+
+  SmartSplitRouter:
+    build: 
+      context: .
+      dockerfile: ./SmartSplitRouter/Dockerfile
+    image: router
+    container_name: router_api
+    ports:
+      - 8090:8090
+  
+  memCache:
+    build: 
+      context: .
+      dockerfile: ./memCache/Dockerfile
+    image: memCache
+    container_name: memCache_api
+    ports:
+      - 8000:8000
+
 volumes:
   redis_data:
   kafka_data:
