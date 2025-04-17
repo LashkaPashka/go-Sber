@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from api.schemas.factors import SCache
-from api.requestsToSerivce.save_data import save_data
+from api.Postman.save_data_in_redis import save_data
 from api.queues.kafka import Kafka
 
 router = APIRouter(

@@ -1,10 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
-from api.memCache.router import router as router_cManipulation
+from api.memCache.router import router as storage_router 
 
 app = FastAPI()
 
-app.include_router(router_cManipulation)
+app.include_router(storage_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

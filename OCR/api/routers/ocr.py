@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from api.createLink import createLink
-from api.requestToRedis import saveData
-from api.requestToRedis.schemas import SCache
+from api.CreateLink import create_link
+from api.PostmanRedis import saveData
+from api.PostmanRedis.schemas import SCache
 
 router = APIRouter(
     prefix="/ocr-work",
@@ -15,7 +15,7 @@ def work(modelCheque: SCache):
     ## Формируем модель json для cheque
     
     ## Создаём ссылку 
-    url = createLink.create_link()
+    url = create_link.create_link()
     hash = url.split("http://localhost:8090/small-router/")
     
     ##Сохраняем в redis

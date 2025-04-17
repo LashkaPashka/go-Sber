@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response, Request
 from datetime import timedelta
 from api.schemas.PositionPrice import SPosition, SAccount
-from api.requestsToSerivce.requestToGo import fetchFromService
+from api.Postman.post_sender import fetchFromService
 
 router = APIRouter(
     prefix="/small-router",

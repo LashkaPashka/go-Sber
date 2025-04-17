@@ -25,7 +25,7 @@ def set_data(key: str, cache: Any = Body(...)):
     host = "localhost"; port = 6379; password = "mypassword"
     PingDb(host=host, port=port, password=password)
 
-    time = timedelta(minutes=120)
+    time = timedelta(minutes=60)
     r = redis.Redis(host=host, port=port, password=password, decode_responses=True)
     r.set(name=f"{key}", value=json.dumps(cache), ex=time)
     
