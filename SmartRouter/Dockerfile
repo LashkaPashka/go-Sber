@@ -6,11 +6,11 @@ ENV PYTHONUNBUFFERED=1
 
 RUN pip install --upgrade pip
 
-COPY ./SmartSplitRouter/requirements.txt .
+COPY ./SmartRouter/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./SmartSplitRouter .
+COPY ./SmartRouter .
 
 EXPOSE 8090
 
