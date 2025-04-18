@@ -4,9 +4,8 @@ import re
 import json
 import os
 
-
 def preprocess_image(image_path):
-    image = Image.open(image_path).convert('L')  # grayscale
+    image = Image.open(image_path).convert('L')
     image = image.filter(ImageFilter.MedianFilter())
     image = ImageEnhance.Contrast(image).enhance(2)
     return image
@@ -89,7 +88,6 @@ def image_to_json_model(image_path: str) -> dict:
 def ocr_run(image_path: str):
     try:
         result = image_to_json_model(image_path)
-        print(json.dumps(result, ensure_ascii=False, indent=2))
         return result
     except Exception as e:
         print(f"Ошибка: {e}")

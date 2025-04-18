@@ -2,6 +2,7 @@ import redis
 
 def PingDb(host: str, port: int, password: str):
     try:
+        ## Подключаемся к Redis
         conn = redis.StrictRedis(
             host=host,
             port=port,

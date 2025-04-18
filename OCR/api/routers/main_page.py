@@ -13,16 +13,23 @@ router = APIRouter(
 
 @router.post("/load-image")
 def add_image(file: UploadFile):
+    ## Генерируем уникальное имя файла
     nameID = randint(100000, 999999)
+    
+    ## Указываем путь к файлу
     im_path = f"api/static/images/{nameID}.webp"
+    
+    ## Сохраняем файл
     with open(im_path, "wb+") as file_object:
         shutil.copyfileobj(file.file, file_object)
     
-    
+    ## Выполняем OCR
     ocr_result = ocr_run(im_path)
     
+    ## Создаем уникальную ссылку
     UrlAndHash = create_link()
     
+    ## Сохраняем данные в Redis
     saveData.save_data(ocr_result, UrlAndHash[1])
     
     return {
