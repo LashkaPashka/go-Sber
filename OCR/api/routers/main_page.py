@@ -19,7 +19,7 @@ def add_image(file: UploadFile):
     ## Указываем путь к файлу
     im_path = f"api/static/images/{nameID}.webp"
     
-    ## Сохраняем файл
+    ## Сохраняем файл в папку static/images
     with open(im_path, "wb+") as file_object:
         shutil.copyfileobj(file.file, file_object)
     
